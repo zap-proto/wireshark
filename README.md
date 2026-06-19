@@ -20,13 +20,16 @@ Plugins
 =======
 
 
-Cap'n Proto RPC protocol dissector
-----------------------------------
+ZAP RPC protocol dissector
+--------------------------
 
 The full RPC schema is available, giving pretty good insight into what
 is going on, at the RPC level.
 
-![screenshot](https://raw.githubusercontent.com/kaos/wireshark-plugins/master/screenshot.png "Screenshot of Cap'n Proto RPC dissector")
+ZAP is wire-compatible with [Cap'n Proto](https://capnproto.org); this
+dissector decodes the Cap'n Proto RPC wire protocol that ZAP speaks.
+
+![screenshot](https://raw.githubusercontent.com/zap-proto/wireshark/master/screenshot.png "Screenshot of ZAP RPC dissector")
 
 ### Capture some data
 
@@ -42,18 +45,18 @@ Example command to capture the data from the capnp calculator sample
 It can look something like this (output from `tshark -r <capture-file.pcapng> -Y capnp`):
 
 ```
-  4 0.000337000    127.0.0.1 51771 127.0.0.1    55000 CAPNP 130 > restore(0) "calculator\0"
-  6 0.000383000    127.0.0.1 51771 127.0.0.1    55000 CAPNP 242 > call(1) (promisedAnswer=(0, []))::Calculator->evaluate(capTable=[], content=(expression=(literal=123))) return to
+  4 0.000337000    127.0.0.1 51771 127.0.0.1    55000 ZAP 130 > restore(0) "calculator\0"
+  6 0.000383000    127.0.0.1 51771 127.0.0.1    55000 ZAP 242 > call(1) (promisedAnswer=(0, []))::Calculator->evaluate(capTable=[], content=(expression=(literal=123))) return to
 : caller, tail call: false
-  8 0.000419000    127.0.0.1 51771 127.0.0.1    55000 CAPNP 210 > call(2) (promisedAnswer=(1, [getPointerField=0]))::Value->read(capTable=[], content=()) return to: caller, tail c
+  8 0.000419000    127.0.0.1 51771 127.0.0.1    55000 ZAP 210 > call(2) (promisedAnswer=(1, [getPointerField=0]))::Value->read(capTable=[], content=()) return to: caller, tail c
 all: false
- 10 0.000479000    127.0.0.1 55000 127.0.0.1    51771 CAPNP 162 <  return(0) results(capTable=[(senderHosted=0)], content=cap(0))
- 12 0.000600000    127.0.0.1 55000 127.0.0.1    51771 CAPNP 170 <  return(1) results(capTable=[(senderHosted=1)], content=(value=cap(0)))
- 14 0.000626000    127.0.0.1 51771 127.0.0.1    55000 CAPNP 106 > finish(0)
- 15 0.000684000    127.0.0.1 55000 127.0.0.1    51771 CAPNP 154 <  return(2) results(capTable=[], content=(value=123))
- 16 0.001076000    127.0.0.1 51771 127.0.0.1    55000 CAPNP 106 > finish(2)
- 17 0.001200000    127.0.0.1 51771 127.0.0.1    55000 CAPNP 106 > finish(1)
- 18 0.001241000    127.0.0.1 51771 127.0.0.1    55000 CAPNP 106 > release(1)
+ 10 0.000479000    127.0.0.1 55000 127.0.0.1    51771 ZAP 162 <  return(0) results(capTable=[(senderHosted=0)], content=cap(0))
+ 12 0.000600000    127.0.0.1 55000 127.0.0.1    51771 ZAP 170 <  return(1) results(capTable=[(senderHosted=1)], content=(value=cap(0)))
+ 14 0.000626000    127.0.0.1 51771 127.0.0.1    55000 ZAP 106 > finish(0)
+ 15 0.000684000    127.0.0.1 55000 127.0.0.1    51771 ZAP 154 <  return(2) results(capTable=[], content=(value=123))
+ 16 0.001076000    127.0.0.1 51771 127.0.0.1    55000 ZAP 106 > finish(2)
+ 17 0.001200000    127.0.0.1 51771 127.0.0.1    55000 ZAP 106 > finish(1)
+ 18 0.001241000    127.0.0.1 51771 127.0.0.1    55000 ZAP 106 > release(1)
 ```
 
 And using `-O capnp` instead:
@@ -62,7 +65,7 @@ Frame 6: 242 bytes on wire (1936 bits), 242 bytes captured (1936 bits) on interf
 Ethernet II, Src: 00:00:00_00:00:00 (00:00:00:00:00:00), Dst: 00:00:00_00:00:00 (00:00:00:00:00:00)
 Internet Protocol Version 4, Src: 127.0.0.1 (127.0.0.1), Dst: 127.0.0.1 (127.0.0.1)
 Transmission Control Protocol, Src Port: 51771 (51771), Dst Port: 55000 (55000), Seq: 65, Ack: 1, Len: 176
-Cap'n Proto RPC Protocol: call(1) (promisedAnswer=(0, []))::Calculator->evaluate(content=(expression=(literal=123)), capTable=[]) return to: caller, tail call: false
+ZAP RPC Protocol: call(1) (promisedAnswer=(0, []))::Calculator->evaluate(content=(expression=(literal=123)), capTable=[]) return to: caller, tail call: false
     Segments: 1
         Segment: 0 ( 21 words )
             Data ( 168 bytes )

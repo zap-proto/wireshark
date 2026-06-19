@@ -16,7 +16,7 @@
 
 local capnp_schema = require("capnp_schema")
 
-local proto = Proto("capnp", "Cap'n Proto RPC Protocol")
+local proto = Proto("capnp", "ZAP RPC Protocol")
 local tcp_port, udp_port
 local dir_marker = {}
 local dir
@@ -25,10 +25,10 @@ local reqs = {}
 proto.fields.text = ProtoField.string("capnp.text", "Text")
 proto.prefs["tcp.port"] = Pref.uint(
    "TCP Port", 9090,
-   "Set the tcp port for Cap'n Proto RPC messages.")
+   "Set the tcp port for ZAP RPC messages.")
 proto.prefs["udp.port"] = Pref.uint(
    "UDP Port", 9090,
-   "Set the udp port for Cap'n Proto RPC messages.")
+   "Set the udp port for ZAP RPC messages.")
 proto.prefs.to_port = Pref.string("Direction marker, to port", "->", "")
 proto.prefs.from_port = Pref.string("Direction marker, from port", "<-", "")
 
@@ -36,7 +36,7 @@ local dissect = {}
 local fileNode, messageNode
 
 function proto.dissector(buf, pkt, root)
-   pkt.cols.protocol:set("CAPNP")
+   pkt.cols.protocol:set("ZAP")
 
    -- didn't find any reliable way to see if it is a TCP or UDP packet!
    dir = pkt.dst_port == tcp_port or pkt.dst_port == udp_port
